@@ -1,0 +1,83 @@
+﻿using System.Runtime.InteropServices;
+using _3dEngine.Inputs.Implementations;
+using _3dEngine.Interfaces;
+
+namespace _3dEngine.Inputs;
+public static class Input
+{
+    private static readonly IInputProvider Provider;
+    
+    public static string WarningMessage { get; private set; } = string.Empty;
+
+    static Input()
+    {
+        if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+        {
+            var winProvider = new User32InputProvider();
+            if (winProvider.IsAvailable)
+            {
+                Provider = winProvider;
+                return;
+            }
+            else
+            {
+                WarningMessage = winProvider.InitializationError!;
+            }
+        }
+        else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
+        {
+            var macProvider = new MacOsInputProvider();
+            if (macProvider.IsAvailable)
+            {
+                Provider = macProvider;
+                return;
+            }
+            else
+            {
+                WarningMessage = macProvider.InitializationError!;
+            }
+        }
+        else
+        {
+            var x11Provider = new LibX11InputProvider();
+            if (x11Provider.IsAvailable)
+            {
+                Provider = x11Provider;
+                return;
+            }
+            else
+            {
+                WarningMessage = x11Provider.InitializationError!;
+            }
+        }
+        
+        Provider = new DotNetInputProvider();
+        ShowWarningAndDelay();
+    }
+    
+    private static void ShowWarningAndDelay()
+    {
+        Console.TreatControlCAsInput = true;
+            
+        Console.ForegroundColor = ConsoleColor.Yellow;
+        Console.WriteLine("\n[Engine Input Initialization Warning]");
+        Console.WriteLine(WarningMessage);
+        Console.ResetColor();
+        Console.WriteLine("Continuing startup with standard console buffer fallback in 2 seconds...\n");
+            
+        Thread.Sleep(2000);
+    }
+
+    public static void Update()
+    {
+        Provider.Update();
+    }
+
+    public static bool IsGetKey(ConsoleKey key) => Provider.IsGetKey(key);
+        
+    public static bool IsGetKey(int virtualKey) => Provider.IsGetKey(virtualKey);
+
+    public static bool IsShift => Provider.IsShift;
+    public static bool IsCtrl  => Provider.IsCtrl;
+    public static bool IsAlt   => Provider.IsAlt;
+}

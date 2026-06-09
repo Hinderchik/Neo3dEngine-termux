@@ -1,4 +1,5 @@
 ﻿using _3dEngine.AbstractClass;
+using _3dEngine.Inputs;
 using _3dEngine.Interfaces;
 using _3dEngine.StaticClass;
 
@@ -15,6 +16,8 @@ public class Frame(Scene activeScene, Screen screen)
         while (true)
         {
             GameTime.StartFrame();
+            
+            Input.Update(); 
 
             _activeScene.Update();
 
