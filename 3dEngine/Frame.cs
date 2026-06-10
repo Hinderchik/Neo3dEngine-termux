@@ -9,10 +9,29 @@ public class Frame(Scene activeScene, Screen screen)
     private readonly Screen _screen = screen;
     private readonly Scene _activeScene = activeScene;
     
+    private static string _currentTitle = "Neo 3D Console";
+    
+    public static string Title
+    {
+        get => _currentTitle;
+        set
+        {
+            _currentTitle = value;
+            try
+            {
+                Console.Title = value; 
+            }
+            catch { 
+                //todo log
+            }
+        }
+    }
+    
     private bool _isRunning = true;
 
     public void MainLoop()
     {
+        Console.Title = _currentTitle;
         _activeScene.Start();
 
         while (_isRunning)

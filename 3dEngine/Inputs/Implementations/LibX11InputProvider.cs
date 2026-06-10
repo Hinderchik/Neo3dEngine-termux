@@ -1,6 +1,5 @@
 ﻿using System.Runtime.InteropServices;
 using _3dEngine.Inputs.Interfaces;
-using _3dEngine.Interfaces;
 
 namespace _3dEngine.Inputs.Implementations;
 
@@ -155,7 +154,7 @@ internal class LibX11InputProvider : IInputProvider
             
             if (!string.IsNullOrEmpty(title))
             {
-                return title.Contains(Console.Title, StringComparison.OrdinalIgnoreCase);
+                return title.Contains(Frame.Title, StringComparison.OrdinalIgnoreCase);
             }
 
             if (XQueryTree(_display, curr, out _, out IntPtr parent, out IntPtr children, out _) != 0)

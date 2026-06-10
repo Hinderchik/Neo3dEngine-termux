@@ -47,12 +47,12 @@ public class PriviewNetworkScene : Scene
         if (isServer) 
         {
             _netManager.StartServer(port);
-            Console.Title = $"SERVER (Port: {port}) | ID: {_myNetId}";
+            Frame.Title = $"SERVER (Port: {port}) | ID: {_myNetId}";
         }
         else 
         {
             _netManager.Connect(targetIp, port);
-            Console.Title = $"CLIENT (ID: {_myNetId}) -> {targetIp}:{port}";
+            Frame.Title = $"CLIENT (ID: {_myNetId}) -> {targetIp}:{port}";
         }
 
         
