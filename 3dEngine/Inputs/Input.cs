@@ -13,13 +13,14 @@ public static class Input
 
     static Input()
     {
+        IInputProvider? selectedProvider = null;
+        
         if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
         {
             var winProvider = new User32InputProvider();
             if (winProvider.IsAvailable)
             {
                 Provider = winProvider;
-                return;
             }
             else
             {
@@ -28,24 +29,40 @@ public static class Input
         }
         else
         {
-            var x11Provider = new LibX11InputProvider();
-            if (x11Provider.IsAvailable)
+            string? sessionType = Environment.GetEnvironmentVariable("XDG_SESSION_TYPE");
+            string? waylandDisplay = Environment.GetEnvironmentVariable("WAYLAND_DISPLAY");
+            
+            if (sessionType == "wayland" && !string.IsNullOrEmpty(waylandDisplay))
             {
-                Provider = x11Provider;
-                return;
+                WarningMessage = "WARNING: Wayland session detected. Direct X11 input polling is restricted by OS security.\n" +
+                                 "-> Falling back to native .NET console buffer for safe and responsive input.";
             }
             else
             {
-                WarningMessage = x11Provider.InitializationError!;
+                var x11Provider = new LibX11InputProvider();
+                if (x11Provider.IsAvailable)
+                {
+                    selectedProvider = x11Provider;
+                }
+                else
+                {
+                    WarningMessage = x11Provider.InitializationError!;
+                }
+            }
+            
+            if (selectedProvider != null)
+            {
+                Provider = selectedProvider;
+            }
+            else
+            {
+                Provider = new DotNetInputProvider();
+                ShowWarningAndDelay();
             }
         }
         
         AppDomain.CurrentDomain.ProcessExit += (s, e) => Dispose();
-    
         Console.CancelKeyPress += (s, e) => { Dispose(); };
-        
-        Provider = new DotNetInputProvider();
-        ShowWarningAndDelay();
     }
     
     private static void ShowWarningAndDelay()
