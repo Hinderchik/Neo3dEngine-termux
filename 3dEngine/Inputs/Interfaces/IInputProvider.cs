@@ -2,7 +2,7 @@
 
 namespace _3dEngine.Inputs.Interfaces;
 
-internal interface IInputProvider : IDisposable
+public interface IInputProvider : IDisposable
 {
     void Update();
     bool IsGetKey(ConsoleKey key);
