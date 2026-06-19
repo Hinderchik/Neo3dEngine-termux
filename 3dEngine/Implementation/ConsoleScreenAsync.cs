@@ -25,10 +25,13 @@ public class ConsoleScreenAsync : Screen
 
     protected override Vector2 CalculateUV(int i, int j)
     {
-        Vector2 uv = new Vector2((float)i / (Width - 1), (float)j / (Height - 1)) * 2 - 1;
-        uv.X *= _aspectRatio;
-        uv.Y = -uv.Y;
-        return uv;
+        float x = (float)i / (Width - 1) * 2 - 1;
+        float y = (float)j / (Height - 1) * 2 - 1;
+
+        x *= _aspectRatio;
+        y = -y;
+
+        return new Vector2(x, y);
     }
 
     protected override void Present()

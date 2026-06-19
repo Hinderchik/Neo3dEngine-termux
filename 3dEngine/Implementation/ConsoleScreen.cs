@@ -19,11 +19,13 @@ public class ConsoleScreen() : IScreen
 
     public Vector2 GetUv()
     {
-        Vector2 uv = _pixelPos / _resolution * 2 - 1;
-        uv.X *= _windowAspect * _pixelAspect;
-        uv.Y = -uv.Y;
-        
-        return uv;
+        float x = (float)_pixelPos.X / (_resolution.X - 1) * 2 - 1;
+        float y = (float)_pixelPos.Y / (_resolution.Y - 1) * 2 - 1;
+
+        x *= _windowAspect * _pixelAspect;
+        y = -y;
+
+        return new Vector2(x, y);
     }
 
     public int GetWidth()
