@@ -5,7 +5,7 @@ using SampleGame.Scenes;
 
 namespace SampleGame;
 
-class Program
+public class Program
 {
     static void Main(string[] args)
     {
@@ -15,10 +15,10 @@ class Program
             return;
         }
 
-        StartInteractiveMenu();
+        RunInteractiveMenu();
     }
 
-    static void StartInteractiveMenu()
+    public static void RunInteractiveMenu()
     {
         Console.ForegroundColor = ConsoleColor.Green;
         Console.WriteLine("=== 3D ENGINE ONLINE SETUP ===");

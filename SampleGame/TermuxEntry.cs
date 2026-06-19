@@ -6,7 +6,7 @@ public static class TermuxEntry
     {
         if (args.Length == 0)
         {
-            Program.Main();
+            Program.RunInteractiveMenu();
             return;
         }
 
@@ -23,7 +23,7 @@ public static class TermuxEntry
                 break;
             default:
                 Console.WriteLine($"Unknown scene: {args[0]}. Falling back to default menu.");
-                Program.Main();
+                Program.RunInteractiveMenu();
                 break;
         }
     }

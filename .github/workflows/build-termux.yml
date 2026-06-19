@@ -1,4 +1,4 @@
-name: Build and Release for Termux
+name: Build for Termux
 
 on:
   push:
@@ -17,21 +17,15 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Setup .NET 8
+      - name: Setup .NET
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: '8.0.x'
 
-      - name: Install cross-build dependencies
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y gcc-aarch64-linux-gnu
-          sudo apt-get install -y libc6-dev-arm64-cross
-
       - name: Restore dependencies
         run: dotnet restore 3dEngine.sln
 
-      - name: Publish for linux-arm64
+      - name: Publish for Termux (linux-arm64)
         run: |
           dotnet publish SampleGame/SampleGame.csproj \
             -c Release \
@@ -40,41 +34,29 @@ jobs:
             -p:PublishSingleFile=true \
             -p:PublishTrimmed=false \
             -p:EnableCompressionInSingleFile=false \
-            -o ./publish/SampleGame
-
-          dotnet publish 3dEngine/3dEngine.csproj \
-            -c Release \
-            -r linux-arm64 \
-            --self-contained false \
-            -o ./publish/3dEngine
+            -o ./publish/termux
 
       - name: Copy launch scripts and asset
         run: |
-          cp termux-setup.sh ./publish/
-          cp termux-run.sh ./publish/
-          cp SampleGame/monkey.obj ./publish/SampleGame/
-          chmod +x ./publish/termux-setup.sh
-          chmod +x ./publish/termux-run.sh
+          cp termux-setup.sh ./publish/termux/
+          cp termux-run.sh ./publish/termux/
+          cp SampleGame/monkey.obj ./publish/termux/
+          chmod +x ./publish/termux/termux-setup.sh
+          chmod +x ./publish/termux/termux-run.sh
 
       - name: Create release archive
         run: |
-          cd ./publish
-          zip -r ../Neo3dEngine-termux-release.zip .
+          cd ./publish/termux
+          zip -r ../../Neo3dEngine-termux-release.zip .
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
-          name: Neo3dEngine-termux-release
+          name: termux-build
           path: Neo3dEngine-termux-release.zip
 
-      - name: Create or update release
-        if: github.ref == 'refs/heads/main'
+      - name: Upload to release
+        if: github.event_name == 'release'
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: termux-latest
-          name: Neo3dEngine Termux Latest
-          body: |
-            Automated linux-arm64 build for Termux.
-            Download `Neo3dEngine-termux-release.zip`, extract and run `./termux-setup.sh` on your Android device.
           files: Neo3dEngine-termux-release.zip
-          fail_on_unmatched_paths: false

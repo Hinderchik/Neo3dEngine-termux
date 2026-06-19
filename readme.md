@@ -135,7 +135,7 @@ You can run Neo 3D on Android using Termux. The fastest way is to download the l
 
 ```bash
 cd ~
-curl -L -o Neo3dEngine-termux-release.zip https://github.com/Hinderchik/Neo3dEngine-termux/releases/download/termux-latest/Neo3dEngine-termux-release.zip
+curl -L -o Neo3dEngine-termux-release.zip https://github.com/Hinderchik/Neo3dEngine-termux/releases/latest/download/Neo3dEngine-termux-release.zip
 unzip Neo3dEngine-termux-release.zip -d Neo3dEngine-termux
 cd Neo3dEngine-termux
 chmod +x termux-setup.sh termux-run.sh
@@ -143,7 +143,34 @@ chmod +x termux-setup.sh termux-run.sh
 ./termux-run.sh PreviewScene
 ```
 
+Alternatively, install the .NET 8 SDK manually and clone the repository:
+
+```bash
+pkg install dotnet-sdk-8.0 git unzip curl
+git clone https://github.com/Hinderchik/Neo3dEngine-termux.git
+cd Neo3dEngine-termux
+./termux-setup.sh
+./termux-run.sh PreviewScene
+```
+
 `termux-setup.sh` will install the .NET 8 SDK if needed, clone the source code, and build the project. `termux-run.sh` starts the selected scene with the correct arguments. No X11 or xterm is required.
+
+### Multiplayer (2+ players)
+
+To host a game for multiple players:
+
+1. Start the server in Termux:
+   ```bash
+   ./termux-run.sh PriviewNetworkScene
+   # Choose [S]erver and enter a port, e.g. 7777
+   ```
+2. Other players connect as clients:
+   ```bash
+   ./termux-run.sh PriviewNetworkScene
+   # Choose [C]lient and enter the server IP and port
+   ```
+
+The server now supports multiple simultaneous client connections and broadcasts player positions and chat messages to all connected clients.
 
 ## Contributing
 

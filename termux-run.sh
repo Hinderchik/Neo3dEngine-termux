@@ -19,13 +19,13 @@ if [ "$SCENE_NAME" = "PriviewNetworkScene" ]; then
     if [[ "$mode" =~ ^[Ss]$ ]]; then
         read -rp "Port [default 7777]: " port
         port=${port:-7777}
-        dotnet run -c Release -- server "$port"
+        dotnet run -c Release -- PriviewNetworkScene server "$port"
     else
         read -rp "Server IP [default 127.0.0.1]: " ip
         ip=${ip:-127.0.0.1}
         read -rp "Server Port [default 7777]: " port
         port=${port:-7777}
-        dotnet run -c Release -- client "$ip" "$port"
+        dotnet run -c Release -- PriviewNetworkScene "$ip" "$port"
     fi
 else
     dotnet run -c Release -- "$SCENE_NAME"
