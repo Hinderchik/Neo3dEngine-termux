@@ -25,6 +25,9 @@ jobs:
       - name: Restore dependencies
         run: dotnet restore 3dEngine.sln
 
+      - name: Build solution
+        run: dotnet build 3dEngine.sln -c Release
+
       - name: Publish for Termux (linux-arm64)
         run: |
           dotnet publish SampleGame/SampleGame.csproj \
@@ -55,8 +58,14 @@ jobs:
           name: termux-build
           path: Neo3dEngine-termux-release.zip
 
-      - name: Upload to release
-        if: github.event_name == 'release'
+      - name: Create or update latest release
+        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
         uses: softprops/action-gh-release@v2
         with:
+          tag_name: termux-latest
+          name: Neo3dEngine Termux Latest
+          body: |
+            Automated linux-arm64 build for Termux.
+            Download `Neo3dEngine-termux-release.zip`, extract and run `./termux-setup.sh` on your Android device.
           files: Neo3dEngine-termux-release.zip
+          fail_on_unmatched_paths: false
