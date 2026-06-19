@@ -4,14 +4,13 @@ using Android.App;
 using Android.OS;
 using Android.Views;
 using Android.Widget;
-using AndroidX.AppCompat.App;
 using Java.IO;
 using Color = Android.Graphics.Color;
 
 namespace Neo3dEngine.Android;
 
-[Activity(Label = "Neo3dEngine", Theme = "@style/Maui.MainTheme.NoActionBar", MainLauncher = true)]
-public class MainActivity : AppCompatActivity
+[Activity(Label = "Neo3dEngine", MainLauncher = true)]
+public class MainActivity : Activity
 {
     private AndroidScreen? _screen;
     private AndroidInputProvider? _inputProvider;
