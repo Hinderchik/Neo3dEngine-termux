@@ -1,8 +1,9 @@
+using System.Text;
+using _3dEngine;
 using _3dEngine.AbstractClass;
 using Android.Graphics;
 using Android.Text;
 using Android.Widget;
-using Java.Lang;
 
 namespace Neo3dEngine.Android;
 
@@ -11,8 +12,8 @@ public class AndroidScreen : Screen
     private readonly TextView _textView;
     private readonly StringBuilder _frameBuilder = new();
     private readonly char[] _charBuffer;
-    private readonly Color[] _consoleColors;
-    private readonly Color[] _colorBuffer;
+    private readonly Android.Graphics.Color[] _consoleColors;
+    private readonly Android.Graphics.Color[] _colorBuffer;
     private readonly int[] _brightnessBuffer;
 
     private const string Gradient = " .:!/r(l1Z4H9W8$@";
@@ -23,7 +24,7 @@ public class AndroidScreen : Screen
         _textView = textView;
         _charBuffer = new char[width * height];
         _consoleColors = MapConsoleColors();
-        _colorBuffer = new Color[width * height];
+        _colorBuffer = new Android.Graphics.Color[width * height];
         _brightnessBuffer = new int[width * height];
 
         float windowAspect = (float)width / height;
@@ -44,7 +45,7 @@ public class AndroidScreen : Screen
         return new Vector2(x, y);
     }
 
-    public override void RenderFrame(_3dEngine.AbstractClass.Scene scene)
+    public override void RenderFrame(Scene scene)
     {
         Parallel.For(0, Height, j =>
         {
@@ -101,7 +102,7 @@ public class AndroidScreen : Screen
         DrawTextToBuffer(text, position, _consoleColors[(int)ConsoleColor.White]);
     }
 
-    private void DrawTextToBuffer(string text, Vector2Int pos, Color color)
+    private void DrawTextToBuffer(string text, Vector2Int pos, Android.Graphics.Color color)
     {
         for (int i = 0; i < text.Length; i++)
         {
@@ -117,26 +118,26 @@ public class AndroidScreen : Screen
         }
     }
 
-    private static Color[] MapConsoleColors()
+    private static Android.Graphics.Color[] MapConsoleColors()
     {
-        var map = new Color[16];
+        var map = new Android.Graphics.Color[16];
 
-        map[(int)ConsoleColor.Black] = Color.Black;
-        map[(int)ConsoleColor.DarkBlue] = Color.DarkBlue;
-        map[(int)ConsoleColor.DarkGreen] = Color.DarkGreen;
-        map[(int)ConsoleColor.DarkCyan] = Color.DarkCyan;
-        map[(int)ConsoleColor.DarkRed] = Color.DarkRed;
-        map[(int)ConsoleColor.DarkMagenta] = Color.DarkMagenta;
-        map[(int)ConsoleColor.DarkYellow] = Color.DarkGoldenrod;
-        map[(int)ConsoleColor.Gray] = Color.Gray;
-        map[(int)ConsoleColor.DarkGray] = Color.DarkGray;
-        map[(int)ConsoleColor.Blue] = Color.Blue;
-        map[(int)ConsoleColor.Green] = Color.Green;
-        map[(int)ConsoleColor.Cyan] = Color.Cyan;
-        map[(int)ConsoleColor.Red] = Color.Red;
-        map[(int)ConsoleColor.Magenta] = Color.Magenta;
-        map[(int)ConsoleColor.Yellow] = Color.Yellow;
-        map[(int)ConsoleColor.White] = Color.White;
+        map[(int)ConsoleColor.Black] = Android.Graphics.Color.Black;
+        map[(int)ConsoleColor.DarkBlue] = Android.Graphics.Color.DarkBlue;
+        map[(int)ConsoleColor.DarkGreen] = Android.Graphics.Color.DarkGreen;
+        map[(int)ConsoleColor.DarkCyan] = Android.Graphics.Color.DarkCyan;
+        map[(int)ConsoleColor.DarkRed] = Android.Graphics.Color.DarkRed;
+        map[(int)ConsoleColor.DarkMagenta] = Android.Graphics.Color.DarkMagenta;
+        map[(int)ConsoleColor.DarkYellow] = Android.Graphics.Color.DarkGoldenrod;
+        map[(int)ConsoleColor.Gray] = Android.Graphics.Color.Gray;
+        map[(int)ConsoleColor.DarkGray] = Android.Graphics.Color.DarkGray;
+        map[(int)ConsoleColor.Blue] = Android.Graphics.Color.Blue;
+        map[(int)ConsoleColor.Green] = Android.Graphics.Color.Green;
+        map[(int)ConsoleColor.Cyan] = Android.Graphics.Color.Cyan;
+        map[(int)ConsoleColor.Red] = Android.Graphics.Color.Red;
+        map[(int)ConsoleColor.Magenta] = Android.Graphics.Color.Magenta;
+        map[(int)ConsoleColor.Yellow] = Android.Graphics.Color.Yellow;
+        map[(int)ConsoleColor.White] = Android.Graphics.Color.White;
 
         return map;
     }

@@ -6,6 +6,7 @@ using Android.Views;
 using Android.Widget;
 using AndroidX.AppCompat.App;
 using Java.IO;
+using Color = Android.Graphics.Color;
 
 namespace Neo3dEngine.Android;
 

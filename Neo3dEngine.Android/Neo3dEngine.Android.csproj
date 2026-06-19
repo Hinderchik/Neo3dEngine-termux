@@ -17,6 +17,7 @@
 
     <ItemGroup>
         <ProjectReference Include="..\3dEngine\3dEngine.csproj" />
+        <ProjectReference Include="..\SampleGame\SampleGame.csproj" />
     </ItemGroup>
 
     <ItemGroup>
