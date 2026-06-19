@@ -129,6 +129,22 @@ class Program
 ```
 
 
+## Installation via Termux
+
+You can run Neo 3D on Android using Termux. The fastest way is to download the latest prebuilt release:
+
+```bash
+cd ~
+curl -L -o Neo3dEngine-termux-release.zip https://github.com/Hinderchik/Neo3dEngine-termux/releases/download/termux-latest/Neo3dEngine-termux-release.zip
+unzip Neo3dEngine-termux-release.zip -d Neo3dEngine-termux
+cd Neo3dEngine-termux
+chmod +x termux-setup.sh termux-run.sh
+./termux-setup.sh
+./termux-run.sh PreviewScene
+```
+
+`termux-setup.sh` will install the .NET 8 SDK if needed, clone the source code, and build the project. `termux-run.sh` starts the selected scene with the correct arguments. No X11 or xterm is required.
+
 ## Contributing
 
 Neo 3D welcomes most pull requests, provided they comply with the [Contributing Guidelines](/.github/CONTRIBUTING.md).

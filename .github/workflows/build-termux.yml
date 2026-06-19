@@ -1,0 +1,80 @@
+name: Build and Release for Termux
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup .NET 8
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: Install cross-build dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y gcc-aarch64-linux-gnu
+          sudo apt-get install -y libc6-dev-arm64-cross
+
+      - name: Restore dependencies
+        run: dotnet restore 3dEngine.sln
+
+      - name: Publish for linux-arm64
+        run: |
+          dotnet publish SampleGame/SampleGame.csproj \
+            -c Release \
+            -r linux-arm64 \
+            --self-contained true \
+            -p:PublishSingleFile=true \
+            -p:PublishTrimmed=false \
+            -p:EnableCompressionInSingleFile=false \
+            -o ./publish/SampleGame
+
+          dotnet publish 3dEngine/3dEngine.csproj \
+            -c Release \
+            -r linux-arm64 \
+            --self-contained false \
+            -o ./publish/3dEngine
+
+      - name: Copy launch scripts and asset
+        run: |
+          cp termux-setup.sh ./publish/
+          cp termux-run.sh ./publish/
+          cp SampleGame/monkey.obj ./publish/SampleGame/
+          chmod +x ./publish/termux-setup.sh
+          chmod +x ./publish/termux-run.sh
+
+      - name: Create release archive
+        run: |
+          cd ./publish
+          zip -r ../Neo3dEngine-termux-release.zip .
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: Neo3dEngine-termux-release
+          path: Neo3dEngine-termux-release.zip
+
+      - name: Create or update release
+        if: github.ref == 'refs/heads/main'
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: termux-latest
+          name: Neo3dEngine Termux Latest
+          body: |
+            Automated linux-arm64 build for Termux.
+            Download `Neo3dEngine-termux-release.zip`, extract and run `./termux-setup.sh` on your Android device.
+          files: Neo3dEngine-termux-release.zip
+          fail_on_unmatched_paths: false

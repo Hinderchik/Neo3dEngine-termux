@@ -7,7 +7,18 @@ namespace SampleGame;
 
 class Program
 {
-    static void Main()
+    static void Main(string[] args)
+    {
+        if (args.Length > 0)
+        {
+            TermuxEntry.LaunchFromArgs(args);
+            return;
+        }
+
+        StartInteractiveMenu();
+    }
+
+    static void StartInteractiveMenu()
     {
         Console.ForegroundColor = ConsoleColor.Green;
         Console.WriteLine("=== 3D ENGINE ONLINE SETUP ===");
@@ -47,6 +58,5 @@ class Program
         Console.Clear();
         
         new Frame(new PriviewNetworkScene(new DisplayManagerAsync(), isServer, ip, port), new ConsoleScreenAsync()).MainLoop();
-        //new Frame(new PreviewScene(new DisplayManagerAsync()), new ConsoleScreenAsync()).MainLoop();
     }
 }

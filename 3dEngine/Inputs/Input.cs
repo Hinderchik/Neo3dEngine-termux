@@ -17,7 +17,12 @@ public static class Input
     {
         IInputProvider? selectedProvider = null;
         
-        if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+        if (IsTermuxEnvironment())
+        {
+            Provider = new TermuxInputProvider();
+            WarningMessage = "Termux environment detected. Using console-based input provider.";
+        }
+        else if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
         {
             var winProvider = new User32InputProvider();
             if (winProvider.IsAvailable)
@@ -99,5 +104,10 @@ public static class Input
     public static void Dispose()
     {
         Provider?.Dispose();
+    }
+    
+    private static bool IsTermuxEnvironment()
+    {
+        return !string.IsNullOrEmpty(Environment.GetEnvironmentVariable("TERMUX_VERSION"));
     }
 }
