@@ -58,6 +58,20 @@ jobs:
           name: termux-build
           path: Neo3dEngine-termux-release.zip
 
+      - name: Build Android APK
+        run: |
+          dotnet publish Neo3dEngine.Android/Neo3dEngine.Android.csproj \
+            -c Release \
+            -f net8.0-android \
+            -p:AndroidPackageFormat=apk \
+            -o ./publish/android
+
+      - name: Upload APK artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: android-apk
+          path: publish/android/*.apk
+
       - name: Create or update latest release
         if: github.ref == 'refs/heads/main' && github.event_name == 'push'
         uses: softprops/action-gh-release@v2
@@ -65,7 +79,8 @@ jobs:
           tag_name: termux-latest
           name: Neo3dEngine Termux Latest
           body: |
-            Automated linux-arm64 build for Termux.
-            Download `Neo3dEngine-termux-release.zip`, extract and run `./termux-setup.sh` on your Android device.
-          files: Neo3dEngine-termux-release.zip
-          fail_on_unmatched_paths: false
+            Automated linux-arm64 and Android APK build.
+            Download `Neo3dEngine-termux-release.zip` for Termux or `*.apk` for Android.
+          files: |
+            Neo3dEngine-termux-release.zip
+            publish/android/*.apk

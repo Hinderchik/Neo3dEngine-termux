@@ -7,7 +7,7 @@ using System;
 namespace _3dEngine.Inputs;
 public static class Input
 {
-    private static readonly IInputProvider Provider;
+    private static IInputProvider Provider;
     
     public static bool IsPollingEnabled { get; set; } = true; 
     
@@ -104,6 +104,12 @@ public static class Input
     public static void Dispose()
     {
         Provider?.Dispose();
+    }
+    
+    public static void SetProvider(IInputProvider provider)
+    {
+        Provider?.Dispose();
+        Provider = provider;
     }
     
     private static bool IsTermuxEnvironment()
