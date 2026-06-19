@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+было  типо чтобы они были совместимы мы <Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
         <TargetFramework>net8.0-android</TargetFramework>
@@ -22,6 +22,19 @@
 
     <ItemGroup>
         <MauiAsset Include="..\SampleGame\monkey.obj" LogicalName="monkey.obj" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <Using Include="Android.App" />
+        <Using Include="Android.Content" />
+        <Using Include="Android.Graphics" />
+        <Using Include="Android.OS" />
+        <Using Include="Android.Runtime" />
+        <Using Include="Android.Views" />
+        <Using Include="Android.Widget" />
+        <Using Include="AndroidX.AppCompat.App" />
+        <Using Include="Java.IO" />
+        <Using Include="Java.Lang" />
     </ItemGroup>
 
 </Project>
