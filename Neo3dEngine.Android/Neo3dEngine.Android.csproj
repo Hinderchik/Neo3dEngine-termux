@@ -11,6 +11,8 @@
         <SingleProject>true</SingleProject>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
+        <SuppressTfmSupportBuildWarnings>true</SuppressTfmSupportBuildWarnings>
+        <NoWarn>NETSDK1202</NoWarn>
     </PropertyGroup>
 
     <ItemGroup>
